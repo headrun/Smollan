@@ -1,10 +1,10 @@
-;(function (angular) {
+;(function (angular, global) {
   "use strict";
 
   angular.module("highcharts")
          .component("highcharts", {
 
-           "templateUrl": "/js/highcharts/highcharts.html",
+           "templateUrl": global.templateDir + "/highcharts.html",
            "controller" : ["Highcharts", "$element", "$scope", "$q",
 
            function (Highcharts, $element, $scope, $q) {
@@ -24,10 +24,7 @@
 
              this.$onInit = function () {
 
-               unWatch = $scope.$watch(function(scope) {
-
-                 return scope.options.series;
-               },
+               unWatch = $scope.$watch("options",
                function(newVal) {
 
                  if (highchartsEle) {
@@ -38,7 +35,7 @@
                  rendered.promise.then(function () {
 
                    highchartsEle = Highcharts.render($ele,
-                                                     $scope.options);
+                                                     JSON.parse($scope.options));
                  });
                });
              };
@@ -51,7 +48,7 @@
            }],
            "bindings": {
 
-             "options": "<"
+             "options": "@"
            }
          })
-}(window.angular));
+}(window.angular, window.BS));

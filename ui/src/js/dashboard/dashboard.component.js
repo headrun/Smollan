@@ -3,11 +3,11 @@
 
   // Decalare Pages that are available in this component
   var pages = {
-                 "chatbot": {
+                 "chat": {
 
-                   "name"    : "chatbot",
-                   "fullName": "dashboard.chatbot",
-                   "text"    : "chatbot",
+                   "name"    : "chat",
+                   "fullName": "dashboard.chat",
+                   "text"    : "chat",
                    "state"   : {},
                    "stateStr": "{}"
                  },
@@ -54,7 +54,7 @@
               };
 
   // If one uses a menu bar, the order of appearance is here
-  var pagesOrder = ["chatbot", "attendance", "osa", "promo", "map", "reports"];
+  var pagesOrder = ["chat", "attendance", "osa", "promo", "map", "reports"];
 
   //Atributes shared across each page component created from above dict
   var sharedProps = [{"name": "show-loading",

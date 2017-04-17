@@ -1,0 +1,27 @@
+messages {
+
+  display: block;
+  max-height: 100%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+
+  div.message {
+
+    &.html, &.js {
+
+      padding: 20px;
+    }
+
+    &.html > .html-content-wrapper {
+
+      table > thead > tr > th {
+        font-style: bold;
+        font-size: 16px;
+        font-family: rockwell, "Helvetica Neue",Helvetica,Arial,sans-serif;
+      }
+    }
+  }
+}
