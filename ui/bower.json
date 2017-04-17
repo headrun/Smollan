@@ -1,0 +1,33 @@
+{
+  "name": "bootstrap",
+  "homepage": "https://github.com/Buzzingasocial/bootstrap",
+  "description": "UI for bootstrap",
+  "main": "app.js",
+  "moduleType": [],
+  "authors": [
+    "prashanth.pamidi@headrun.com"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "bootstrap": "^3.3.6",
+    "angular": "1.5.5",
+    "angular-route": "1.5.5",
+    "bower": "*",
+    "install": "^1.0.4",
+    "angular-ui-router": "0.3.0",
+    "font-awesome": "^4.6.3",
+    "highcharts": "^4.2.5",
+    "angular-resource": "1.5.5",
+    "underscore": "^1.8.3",
+    "angular-ui-bootstrap": "1.3.3"
+  }
+}

@@ -1,0 +1,65 @@
+       <div id="header" class="clearfix" data-current-skin="blue">
+            <ul class="header-inner">
+                <li id="menu-trigger" data-trigger="#sidebar">
+                    <div class="line-wrap">
+                        <div class="line top"></div>
+                        <div class="line center"></div>
+                        <div class="line bottom"></div>
+                    </div>
+                </li>
+
+                <li class="logo hidden-xs">
+                    <a href="index.html">Smollan</a>
+                </li>
+                <li>
+                    <div class="card-body card-padding">
+                        <div role="tabpanel">
+                            <ul class="tab-nav" role="tablist">
+                                <li ng-repeat="tab in $ctrl.tabs"
+                                    ng-class="{ 'active': $ctrl.activeTab === tab.name }">
+                                  <a ui-sref="{{ tab.fullName + '({state: tab.state})' }}">
+                                    {{ tab.text }}
+                                  </a>
+                                </li>
+                            </ul>
+                          
+                        </div>
+                    </div>
+                </li>
+                <li class="pull-right">
+                    <ul class="top-menu">
+                        <li><logout></logout></li>
+                    </ul>
+                </li>
+            </ul>
+
+
+            <!-- Top Search Content -->
+            <div id="top-search-wrap">
+                <div class="tsw-inner">
+                    <i id="top-search-close" class="zmdi zmdi-arrow-left"></i>
+                    <input type="text">
+                </div>
+            </div>
+        </div>
+
+<!--
+<nav class="navbar navbar-default navbar-fixed-top clearfix"
+     ng-class="{collapsed: $ctrl.collapsed}">
+
+  <a ng-click="$ctrl.toggleCollapse()"
+     class="pull-left brand">
+     Brand
+  </a>
+
+  <ul class="nav navbar-nav pull-right">
+    <li ng-repeat="tab in $ctrl.tabs"
+        ng-class="{ 'active': $ctrl.activeTab === tab.name }">
+      <a ui-sref="{{ tab.fullName + '({state: tab.state})' }}">
+        {{ tab.text }}
+      </a>
+    </li>
+    <li><logout></logout></li>
+  </ul>
+</nav>
+-->

@@ -1,0 +1,12 @@
+<div class="dashboard-content-wrapper" ng-class="{'loading': $ctrl.isLoading }">
+
+  <header active-tab="$ctrl.activePage"
+          tabs="$ctrl.pages"
+          tabs-order="$ctrl.pagesOrder"></header>
+
+  <div class="dashboard-content" ui-view
+       autoscroll="false"></div>
+
+  <footer></footer>
+  <div class="loading-overlay"></div>
+</div>

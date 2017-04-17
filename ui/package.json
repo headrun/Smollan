@@ -1,0 +1,33 @@
+{
+  "name": "bootstrap",
+  "version": "0.0.1",
+  "description": "Angular + Django Boilerplate",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Buzzingasocial/bootstrap.git"
+  },
+  "environment": "!production",
+  "author": "prashanth.pamidi@headrun.com",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "underscore": "^1.8.3"
+  },
+  "bugs": {
+    "url": "https://github.com/Buzzingasocial/bootstrap/issues"
+  },
+  "homepage": "https://github.com/Buzzingasocial/bootstrap#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-aws": "^0.6.2",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-less": "^1.4.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "html-minifier": "^3.0.2",
+    "jsdom": "^9.4.2",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "uglify-js": "^2.7.0"
+  }
+}

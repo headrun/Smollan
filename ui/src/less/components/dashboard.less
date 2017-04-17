@@ -1,0 +1,258 @@
+dashboard {
+
+  display: block;
+  .cover;
+
+  div.insights-modal {
+
+    i.indicator {
+
+      width: 18px;
+      height: 18px;
+      display: block;
+      background-image: url(/img/trafficlights.png);
+
+      &.green {
+
+        background-position: 0 -17px;
+      }
+    }
+  }
+
+  div.dashboard-content-wrapper {
+
+    .cover;
+
+    &.loading {
+
+      div.dashboard-content {
+
+        .opacity(0.2);
+      }
+
+      div.loading-overlay {
+
+        display: block;
+      }
+    }
+  }
+
+  div.loading-overlay {
+
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .cover;
+    z-index: 1;
+    background: transparent url(/img/preloader.gif) center center no-repeat;
+  }
+
+  div.dashboard-nav {
+
+    position: absolute;
+    top: 60px;
+    width:200px;
+    back-ground-color: #eaeaeb;
+    height: 100%;
+
+  }
+  div.dashboard-content {
+
+    height: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: @gutter 0 0 0;
+
+    .dashboard-content-view {
+
+      position: relative;
+      display: block;
+      .cover;
+
+      div.extra-actions {
+
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        dropdown {
+
+          display: block;
+        }
+
+        a.reset {
+
+          margin: 0 @gutter;
+        }
+      }
+    }
+
+    filter-bar {
+
+      display: block;
+      width: 15%;
+      height: 100%;
+      padding-left: @gutter;
+      overflow: auto;
+      .pull-left;
+
+      filter {
+
+        display: block;
+        width: 100%;
+
+        input, select, textarea {
+
+          border-radius: 0;
+        }
+
+        select.form-control {
+
+          height: 26px;
+        }
+      }
+    }
+
+    .tabs-content {
+
+      position: relative;
+      display: block;
+      padding-top: @gutter;
+
+      .cover;
+
+      tab {
+
+        display: block;
+        .cover;
+      }
+    }
+
+    ul.nav-tabs {
+
+      margin-bottom: 0;
+    }
+
+    .no-filters {
+
+      .visualization {
+
+        width: 100%;
+      }
+    }
+
+    .visualization {
+
+      width: 85%;
+      height: 100%;
+      padding: 0 @gutter 50px @gutter;
+      .pull-left;
+      overflow: auto;
+
+      &> div.layout-content {
+
+        overflow: auto;
+        .cover;
+      }
+
+      &.child {
+
+        .cover;
+      }
+
+      div.widget-row {
+
+        margin-bottom: @gutter;
+        .clearfix;
+        width: 100%;
+
+        &:last-child {
+
+          margin-bottom: 0;
+        }
+
+        div.widget {
+
+          .pull-left;
+          padding-left: @gutter;
+
+          div.widget-content {
+
+            .cover;
+            .box-shadow(0 0 4px @widget-shadow-color);
+            background-color: @widget-bg;
+            border: 1px solid @widget-border;
+            text-align: left;
+            position: relative;
+
+            div.widget-title {
+
+              font-size: 1.2em;
+              line-height: 120%;
+              height: 20px + @gutter;
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              padding: @gutter/2 30px @gutter/2 @gutter;
+              background-color: @widget-title-bg;
+              .text-overflow;
+              color: @widget-bg;
+            }
+
+            div.widget-body {
+
+              position: relative;
+              padding: 20px + @gutter @gutter @gutter @gutter;
+              height: 100%;
+
+              button.insights-trigger {
+
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+              }
+
+              .download-btn {
+
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                z-index: 1;
+                color: rgba(255,255,255,0.5);
+
+                &:hover {
+
+                  color: #ffffff;
+                }
+
+                a.dropdown-toggle {
+
+                  color: inherit;
+                  text-decoration: none;
+                }
+
+                ul.dropdown-menu {
+
+                  right: 0;
+                  left: auto;
+                }
+              }
+
+            }
+          }
+
+          &:first-child {
+
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}

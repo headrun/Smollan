@@ -1,0 +1,11 @@
+
+*.svn
+*.swp
+*.swo
+*.swn
+*.swm
+*.pyc
+backend/venv/*
+ui/src/libs/*
+ui/dist/*
+ui/node_modules/*
