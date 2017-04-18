@@ -7,7 +7,7 @@
 
                    "name"    : "chat",
                    "fullName": "dashboard.chat",
-                   "text"    : "chat",
+                   "text"    : "chatbot",
                    "state"   : {},
                    "stateStr": "{}"
                  },
