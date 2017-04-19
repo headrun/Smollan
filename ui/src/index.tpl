@@ -9,6 +9,8 @@
     <!-- vendor styles -->
     <link rel="stylesheet"
           href="<%= static("libs/font-awesome/css/font-awesome.min.css", true) %>" />
+    <link rel="stylesheet"
+          href="<%= static("libs/datatables/media/css/jquery.dataTables.min.css", true) %>" />
     <!-- application specific styles -->
     <link rel="stylesheet"
       href="<%= static("css/admin.css") %>"/>
