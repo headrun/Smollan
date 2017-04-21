@@ -96,6 +96,8 @@
 
              function (Session, $state, $rootScope) {
 
+               $('body').removeClass('login-content sw-toggled');
+
                var stateName = $state.current.name.split(".")[1];
 
                var that = this;

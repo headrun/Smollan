@@ -9,6 +9,8 @@
 
              function ($rootScope, Auth, AUTH_EVENTS) {
 
+              $('body').addClass('login-content sw-toggled');
+
               var that = this;
 
               this.credentials = {
@@ -18,7 +20,7 @@
               };
 
               this.errorMsg = "";
-              this.loadingText = "Submit";
+              this.loadingText = "Login";
 
               this.onSubmit = function (credentials) {
 
@@ -30,7 +32,7 @@
                   $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                 }, function () {
 
-                  that.loadingText = "Submit";
+                  that.loadingText = "Login";
                   that.errorMsg = "Invalid Credentials";
                   that.viewSubmit = "";
                 });
