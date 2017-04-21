@@ -1,5 +1,6 @@
 from __future__ import division
 import json
+import pycountry
 
 from django.shortcuts import render
 from django.db.models import Sum
@@ -185,12 +186,20 @@ def heatmap(request):
     query_data = Kpi.objects.all().values('countrycode').annotate(
             actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
     data_list = []
+
+    py_countries = {}
+    for country in pycountry.countries:
+       py_countries[country.name] = country.alpha_2
+
     for data in query_data:
-	if _format == 'dict':
-	    data_dict = {}
-	    data_dict['country'] = data['countrycode']
-	    data_dict['percentage'] = round((data['actual']/data['target'])*100, 2)
-	    data_list.append(data_dict)
-	else:
-	    data_list.append([data['countrycode'] + ',' + str(round((data['actual']/data['target'])*100, 2))])
-    return HttpResponse(data_list)	
+        if _format == 'dict':
+            data_dict = {}
+            data_dict['name'] = data['countrycode'].title()
+            data_dict['code'] = py_countries.get(data['countrycode'].title(), 'Unknown code')
+            data_dict['value'] = round((data['actual']/data['target'])*100, 0)
+            if not data_dict['code'] == 'Unknown code':
+                data_list.append(data_dict)
+        else:
+            data_list.append(
+                [data['countrycode'] + ',' + str(round((data['actual']/data['target'])*100, 2))])
+    return HttpResponse(data_list)  
