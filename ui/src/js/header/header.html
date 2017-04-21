@@ -15,10 +15,27 @@
                             <ul class="tab-nav" role="tablist">
                                 <li ng-repeat="tab in $ctrl.tabs"
                                     ng-class="{ 'active': $ctrl.activeTab === tab.name }">
-                                  <a ui-sref="{{ tab.fullName + '({state: tab.state})' }}">
+
+                                  <a ng-if="['reports', 'cca', 'npd', 'pop'].indexOf(tab.name) == -1 && tab.name != 'reports'" 
+                                     ui-sref="{{ tab.fullName + '({state: tab.state})' }}">
                                     {{ tab.text }}
                                   </a>
+
                                 </li>
+                                <li>                                
+                                  <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Reports
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                      <li ng-repeat="tab in $ctrl.tabs"
+                                          ng-class="{ 'active': $ctrl.activeTab === tab.name }">
+                                        <a ng-if="['reports', 'cca', 'npd', 'pop'].indexOf(tab.name) >= 0 && tab.name != 'reports'" 
+                                           ui-sref="{{ tab.fullName + '({state: tab.state})' }}">
+                                          {{ tab.text }}
+                                        </a>
+                                    </ul>
+                                  </div>
+                                </li>                                
                             </ul>
                           
                         </div>

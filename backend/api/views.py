@@ -93,7 +93,7 @@ def attendance(request):
 
 
 @loginRequired
-#@csrf_exempt
+@csrf_exempt
 @allowedMethods(["GET"])
 def osa(request):
     kpis = Kpi.objects.all()

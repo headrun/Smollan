@@ -11,6 +11,7 @@
                var that = this;
 
                this.collapsed = false;
+               $('.dropdown-toggle').dropdown();
 
                this.toggleCollapse = function () {
 

@@ -1,6 +1,5 @@
 ;(function (angular) {
   "use strict";
 
-  angular.module("reports", []);
-
+  angular.module("cca", []);
 }(window.angular));

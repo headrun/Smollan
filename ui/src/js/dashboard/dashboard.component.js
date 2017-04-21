@@ -50,11 +50,37 @@
                    "text"    : "Reports",
                    "state"   : {},
                    "stateStr": "{}"
-                 }
+                 },
+                 "cca": {
+
+                   "name"    : "cca",
+                   "fullName": "dashboard.cca",
+                   "text"    : "cca",
+                   "state"   : {},
+                   "stateStr": "{}"
+                 },
+                 "npd": {
+
+                   "name"    : "npd",
+                   "fullName": "dashboard.npd",
+                   "text"    : "Npd",
+                   "state"   : {},
+                   "stateStr": "{}"
+                 },
+                 "pop": {
+
+                   "name"    : "pop",
+                   "fullName": "dashboard.pop",
+                   "text"    : "Pop",
+                   "state"   : {},
+                   "stateStr": "{}"
+                 }                 
               };
 
+
   // If one uses a menu bar, the order of appearance is here
-  var pagesOrder = ["chat", "attendance", "osa", "promo", "map", "reports"];
+  var pagesOrder = ["chat", "attendance", "osa", "promo", "map", "reports", "cca", "npd", "pop"];
+
 
   //Atributes shared across each page component created from above dict
   var sharedProps = [{"name": "show-loading",
@@ -189,6 +215,7 @@
                  "authRequired": true
                });
              });
+
 
 
              $urp.otherwise(pagesOrder[0]);
