@@ -6,3 +6,4 @@ python-dateutil==2.5.3
 sqlparse==0.2.1
 uWSGI==2.0.13.1
 python-openid==2.2.5
+pycountry==17.1.8
