@@ -107,6 +107,45 @@ def osa(request):
 
     return HttpResponse(list(kpi_values))
 
+@loginRequired
+def pop(request):
+    kpis = Kpi.objects.all()
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'pop_target', 'pop_available')
+    for kpi_val in kpi_values:
+        try:
+            kpi_val['pop_percent'] = round(
+                (kpi_val['pop_available']/kpi_val['pop_target'])*100, 2)
+        except ZeroDivisionError as e:
+            kpi_val['pop_percent'] = 0
+
+    return HttpResponse(list(kpi_values)) 
+
+@loginRequired
+def npd(request):
+    kpis = Kpi.objects.all()
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'npd_target', 'npd_available')
+    for kpi_val in kpi_values:
+        try:
+            kpi_val['npd_percent'] = round(
+                (kpi_val['npd_available']/kpi_val['npd_target'])*100, 2)
+        except ZeroDivisionError as e:
+            kpi_val['npd_percent'] = 0
+
+    return HttpResponse(list(kpi_values))
+
+@loginRequired
+def outlets(request):
+    kpis = Kpi.objects.all()
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'outlets_done', 'outlets_total')
+    for kpi_val in kpi_values:
+        try:
+            kpi_val['outlets_percent'] = round(
+                (kpi_val['outlets_done']/kpi_val['outlets_total'])*100, 2)
+        except ZeroDivisionError as e:
+            kpi_val['outlets_percent'] = 0
+
+    return HttpResponse(list(kpi_values))
+
 #@loginRequired
 @csrf_exempt
 @allowedMethods(["GET"])
@@ -139,4 +178,19 @@ def promo(request):
         kpi_val['day'] = getUnixTimeMillisec(kpi_val['day'])
         resp_list.append([kpi_val['day'], kpi_val['percent']])
     return HttpResponse(resp_list)
- 
+
+@loginRequired
+def heatmap(request):
+    _format = request.GET.get('format', 'dict')
+    query_data = Kpi.objects.all().values('countrycode').annotate(
+            actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+    data_list = []
+    for data in query_data:
+	if _format == 'dict':
+	    data_dict = {}
+	    data_dict['country'] = data['countrycode']
+	    data_dict['percentage'] = round((data['actual']/data['target'])*100, 2)
+	    data_list.append(data_dict)
+	else:
+	    data_list.append([data['countrycode'] + ',' + str(round((data['actual']/data['target'])*100, 2))])
+    return HttpResponse(data_list)	

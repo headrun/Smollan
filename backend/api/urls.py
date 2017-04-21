@@ -8,4 +8,8 @@ urlpatterns = [
     url(r'^attendance/', views.attendance),
     url(r'^osa/', views.osa),
     url(r'^promo/', views.promo),
+    url(r'^pop/', views.pop),
+    url(r'^npd', views.npd),
+    url(r'^outlets', views.outlets),
+    url(r'^heatmap', views.heatmap),
 ]
