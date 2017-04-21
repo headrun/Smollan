@@ -9,7 +9,9 @@ urlpatterns = [
     url(r'^osa/', views.osa),
     url(r'^promo/', views.promo),
     url(r'^pop/', views.pop),
-    url(r'^npd', views.npd),
-    url(r'^outlets', views.outlets),
-    url(r'^heatmap', views.heatmap),
+    url(r'^npd/', views.npd),
+    url(r'^outlets/', views.outlets),
+    url(r'^heatmap/', views.heatmap),
+    url(r'^get_countries/', views.get_countries),
+    url(r'^get_projects/', views.get_projects),
 ]

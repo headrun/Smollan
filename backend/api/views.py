@@ -32,7 +32,7 @@ def test_fail(request):
   return HttpResponse("sample error resp", error=1)
 
 
-def get_filtered_graph_data(model, country, project):
+def get_filtered_graph_data(model, country, project, start_date, end_date):
     model_objs = get_model('api', model).objects.all()
     return_key = None
     graph_data = []
@@ -42,21 +42,24 @@ def get_filtered_graph_data(model, country, project):
         'project': 'project'
     }
 
-    if not country:
-        query_data = [model_objs.aggregate(
+    if not country and start_date and end_date:
+        query_data = [model_objs.filter(day__gte=start_date, day__lte=end_date).aggregate(
             actual=Sum('attendance_achvd'), target=Sum('attendance_target'))]
         return_key = 'all'
-    if country and not project:
-        query_data = model_objs.filter(countrycode=country).values('project').annotate(
-            actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+    if country and not project and start_date and end_date:
+        query_data = model_objs.filter(countrycode=country, day__gte=start_date, \
+		day__lte=end_date).values('project').annotate(
+            	actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
         return_key = 'projects'
-    if country and project:
+    if country and project and start_date and end_date:
         if country == 'all' and project == 'all':
-            query_data = model_objs.values('countrycode').annotate(
-                actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+            query_data = model_objs.filter(day__gte=start_date, day__lte=end_date).\
+		values('countrycode').annotate(actual=Sum('attendance_achvd'), \
+		target=Sum('attendance_target'))
             return_key = 'countries'
         else:
-            query_data = model_objs.filter(project=project).values('project').annotate(
+            query_data = model_objs.filter(project=project, day__gte=start_date, \
+		day__lte=end_date).values('project').annotate(
                 actual=Sum('attendance_achvd'), target=Sum('attendance_target'))            
             return_key = 'project'
 
@@ -81,8 +84,10 @@ def attendance(request):
     project = request.GET.get('project', None)
     day = request.GET.get('day', None)
     #import pdb;pdb.set_trace()
+    start_date = request.GET.get('start_date', '2016-12-01')
+    end_date = request.GET.get('end_date', '2016-12-31')
 
-    graph_data, detail = get_filtered_graph_data('kpi', country, project)
+    graph_data, detail = get_filtered_graph_data('kpi', country, project, start_date, end_date)
 
     resp = {
       'name': detail,
@@ -152,6 +157,8 @@ def outlets(request):
 def promo(request):
     start_date = request.GET.get('start_date', None)
     end_date = request.GET.get('end_date', None)
+    country = request.GET.get('country', 'singapore')
+    project = request.GET.get('project', 'dksh')
 
     if start_date:
         start_date = parser.parse(start_date).date()
@@ -164,7 +171,8 @@ def promo(request):
     else:
         #end_date = datetime.datetime.now().date()
         end_date = parser.parse('2016-12-31').date()
-    kpis = Kpi.objects.filter(day__gte=start_date, day__lte=end_date)
+    kpis = Kpi.objects.filter(day__gte=start_date, day__lte=end_date,\
+		 countrycode = country, project = project)
 
     kpi_values = kpis.values('day').annotate(
                 actual=Sum('promo_available'), target=Sum('promo_target'))
@@ -182,8 +190,15 @@ def promo(request):
 @loginRequired
 def heatmap(request):
     _format = request.GET.get('format', 'dict')
-    query_data = Kpi.objects.all().values('countrycode').annotate(
-            actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+    start_date = request.GET.get('start_date', '2016-12-01')
+    end_date = request.GET.get('end_date', '2016-12-31')
+    country = request.GET.get('country', 'singapore')
+    project = request.GET.get('project', 'dksh')
+
+    query_data = Kpi.objects.filter(day__gte=start_date, day__lte=end_date,\
+		    countrycode = country, project = project).\
+		    values('countrycode').annotate(
+            	    actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
     data_list = []
     for data in query_data:
 	if _format == 'dict':
@@ -194,3 +209,23 @@ def heatmap(request):
 	else:
 	    data_list.append([data['countrycode'] + ',' + str(round((data['actual']/data['target'])*100, 2))])
     return HttpResponse(data_list)	
+
+def get_countries(request):
+    countries = Kpi.objects.filter().values_list('countrycode').distinct()
+    cnt_list = []
+    for country in countries:
+	cnt_list.append(country[0])
+
+    return HttpResponse(cnt_list)
+
+def get_projects(request):
+    country = request.GET.get('country', 'all')
+    if country == 'all':
+	projects = Kpi.objects.filter().values_list('project').distinct()
+    else:
+	projects = Kpi.objects.filter(countrycode=country).values_list('project').distinct()
+    prj_list = []
+    for project in projects:
+	prj_list.append(project[0])
+
+    return HttpResponse(prj_list)
