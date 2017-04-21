@@ -17,7 +17,7 @@
 
                var cca_table = $('#cca_table').DataTable( {
                     "ajax":{
-                      url: "/api/cca/",
+                      url: "/api/outlets/",
                       "dataSrc": function(json){
                         $.each(json.result, function(ind,entry){
                           entry['slno'] = ind+1;
@@ -30,9 +30,9 @@
                         { "data": "countrycode" },
                         { "data": "project" },
                         { "data": "moc" },
-                        { "data": "cca_target" },
-                        { "data": "cca_available" },
-                        { "data": "cca_percent" }                  
+                        { "data": "outlets_total" },
+                        { "data": "outlets_done" },
+                        { "data": "outlets_percent" }                  
                     ]
                 } );
 
