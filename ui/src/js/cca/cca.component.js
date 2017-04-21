@@ -36,7 +36,15 @@
                     ]
                 } );
 
+		$('#country').keyup(function () {
+                        var v =$(this).val();
+                        cca_table.columns(1).search(v).draw();
+                } );
 
+                $('#project').keyup(function () {
+                        var v =$(this).val();
+                        cca_table.columns(2).search(v).draw();
+                } );
 
                 cca_table.columns().every( function () {
                     var that = this;

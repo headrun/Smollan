@@ -1,32 +1,24 @@
 <aside id="sidebar" class="sidebar toggled c-overflow">
-    <div class="col-sm-12">
-        <label for="country">Countries</label>
-        <select name="country" class="selectpicker filters form-control">
-            <option>SINGAPORE</option>
-            <option>TAIWAN</option>
-            <option>MALAYASIA</option>
-        </select>
-    </div>
-    <div class="col-sm-12">
-        <label for="country">Projects</label>
-        <select name="country" class="selectpicker filters form-control">
-            <option>SINGAPORE</option>
-            <option>TAIWAN</option>
-            <option>MALAYASIA</option>
-        </select>
-    </div>
-    <div class="col-sm-12">
-        <label for="country">Date</label>
-        <input type="date" class="form-control  filters" name="date">
-    </div>
+    <table border="0" cellspacing="5" cellpadding="5">
+        <tbody>
+            <tr>
+                <td>Country</td>
+                <td><input type="text" id="country" name="country"></td>
+            </tr>
+            <tr>
+                <td>Project</td>
+                <td><input type="text" id="project" name="project"></td>
+            </tr>
+        </tbody>
+    </table>
 </aside>
 <div id="npd-container" >
     <table id="npd_table" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Sl.No</th>
-                <th>Project</th>
                 <th>Country</th>
+                <th>Project</th>
                 <th>Moc</th>
                 <th>Target</th>
                 <th>Achieved</th>
@@ -36,8 +28,8 @@
         <tfoot>
             <tr>
                 <td>Sl.No</td>
-                <td>Project</td>
                 <td>Country</td>
+                <td>Project</td>
                 <td>Moc</td>
                 <td>Target</td>
                 <td>Achieved</td>
