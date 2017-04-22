@@ -1,24 +1,36 @@
 <aside id="sidebar" class="sidebar toggled c-overflow">
     <div class="col-sm-12">
         <label for="country">Countries</label>
-        <select name="country" class="selectpicker filters form-control">
-            <option>SINGAPORE</option>
-            <option>TAIWAN</option>
-            <option>MALAYASIA</option>
+        <select name="country" ng-model="$ctrl.selectedCountry"
+                ng-change="$ctrl.onCountryChange()"
+                class="selectpicker filters form-control">
+            <option value="" >All Countries</option>                
+            <option ng-repeat="country in $ctrl.countries" value="{{country}}">{{country}}</option>
         </select>
     </div>
     <div class="col-sm-12">
         <label for="country">Projects</label>
-        <select name="country" class="selectpicker filters form-control">
-            <option>SINGAPORE</option>
-            <option>TAIWAN</option>
-            <option>MALAYASIA</option>
+        <select name="country" ng-model="$ctrl.selectedProject"
+                ng-change="$ctrl.onProjectChange()"        
+                class="selectpicker filters form-control">
+            <option value="" >All Projects</option>
+            <option ng-repeat="project in $ctrl.projects" value="{{project}}">{{project}}</option>
         </select>
     </div>
+
     <div class="col-sm-12">
-        <label for="country">Date</label>
-        <input type="date" class="form-control  filters" name="date">
+        <p class="c-black f-500 m-b-20">Date</p>
+        
+        <div class="input-group form-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <div class="dtp-container fg-line">
+                <input type='text' ng-model="$ctrl.dateRange"
+                       ng-change="$ctrl.onDateChange()"
+                       class="form-control date-picker filters" placeholder="Click here...">
+            </div>
+        </div>
     </div>
+        
 </aside>
 <div id="map-container" >
 	

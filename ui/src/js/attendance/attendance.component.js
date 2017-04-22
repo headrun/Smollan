@@ -4,9 +4,9 @@
   angular.module("attendance")
          .component("attendance", {
            "templateUrl": global.templateDir + "/attendance.html",
-           "controller" : ["$rootScope", "$state", "$http",
+           "controller" : ["$rootScope", "$state", "$http", "$scope",
 
-             function ($rootScope, $state, $http) {
+             function ($rootScope, $state, $http, $scope) {
 
               var that = this,
                  filter_map = {
@@ -15,9 +15,14 @@
                   "project": "project"
                  };
 
-              that.currentState = null;
-              that.country = null;
-              that.project = null;
+
+              that.countries = null;
+              that.projects = null;
+              that.selectedCountry = null;
+              that.selectedProject = null;
+              that.dateRange = null;
+              that.awaitingResponse = false;
+
 
               function get_series_params(chart, e){
 
@@ -46,7 +51,7 @@
                                   var chart = this,
                                       detail_filter = filter_map[this.series[0].name]+'::'+e.point.name, 
                                       parms = get_series_params(this, e);
-                                      getData(parms[0], parms[1], chart, true, e.point);
+                                      that.getData(parms[0], parms[1], chart, true, e.point);
                               }
 
                           }
@@ -80,16 +85,22 @@
               });
 
 
-              function getData(country, project, chrt, is_drill_down, point) {
+              that.getData = function (country, project, chrt, is_drill_down, point) {
 
-                country = country || null;
-                project = project || null;
+                var country = country || that.selectedCountry,
+                  project = project || that.selectedProject,
+                  daterange = that.dateRange || null;
                 var response = null;
 
                 $http({
                   url: "/api/attendance", 
                   method: "GET",
-                  params: {"country": country, "project": project}
+                  params: {
+                    "country": country,
+                    "project": project,
+                    "start_date": daterange,
+                    "end_date": daterange
+                  }
                 })
                     .then(function (resp) {
 
@@ -104,6 +115,7 @@
 
                         chrt.addSeriesAsDrilldown(point, resp.result);
                       }else{
+                        att_chart.series[0] && att_chart.series[0].remove(true);                        
                         att_chart.addSeries(resp.result)
                       }
                       that.hideLoading();
@@ -112,8 +124,133 @@
                       that.awaitingResponse = true;
                     });
               }
-              getData(that.country, that.project, att_chart, false);
-              // Highchart end
+
+              that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+
+              //Series end
+
+              that.getCountriesData = function(){
+
+                var response = null,
+                  country = that.selectedCountry || null;
+
+                return $http({
+                  url: "/api/get_countries", 
+                  method: "GET",
+                  params: {}
+                })
+                  .then(function (resp) {
+
+                      console.log(resp);
+                      resp = resp.data;
+
+                      if (resp.error) {
+
+                        return;
+                      }
+
+                      that.countries = resp.result;
+
+                    }).then(function () {
+
+                      that.awaitingResponse = true;
+                  });
+
+              }
+
+
+              that.getProjectsData = function(){
+
+                var response = null,
+                  country = that.selectedCountry || null;
+
+                return $http({
+                  url: "/api/get_projects", 
+                  method: "GET",
+                  params: {country: country}
+                })
+                  .then(function (resp) {
+
+                      console.log(resp);
+                      resp = resp.data;
+
+                      if (resp.error) {
+
+                        return;
+                      }
+
+
+                      that.projects = resp.result;
+                    }).then(function () {
+
+                      that.awaitingResponse = true;
+                  });
+
+              }
+
+              that.getCountriesData();
+              that.getProjectsData();
+              // Filters initialization
+
+              this.onCountryChange = function(){
+
+                that.selectedProject = null;
+                that.getProjectsData().then(function(){
+
+                  that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+                });
+
+              }
+
+              this.onProjectChange = function(){
+
+                that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+              }
+
+              this.onDateChange = function(){
+
+                that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+              }
+
+
+              // Widget initializations
+              $('.date-picker').datetimepicker({
+                  format: 'DD/MM/YYYY',
+                  useCurrent: false
+              }).on('dp.show', function (e) {
+                var datepicker = $('body').find('.bootstrap-datetimepicker-widget:last'),
+                    position = datepicker.offset(),
+                    parent = datepicker.parent(),
+                    parentPos = parent.offset(),
+                    width = datepicker.width(),
+                    parentWid = parent.width();
+
+                // move datepicker to the exact same place it was but attached to body
+                datepicker.appendTo('body');
+                datepicker.css({
+                    position: 'absolute',
+                    top: position.top,
+                    bottom: 'auto',
+                    left: position.left,
+                    right: 'auto',
+                    'z-index': 10
+                });
+
+                // if datepicker is wider than the thing it is attached to then move it so the centers line up
+                if (parentPos.left + parentWid < position.left + width) {
+                    var newLeft = parentPos.left;
+                    newLeft += parentWid / 2;
+                    newLeft -= width / 2;
+                    datepicker.css({left: newLeft});
+                }
+            }).on('dp.change', function(date, oldDate){
+              $scope.$apply(function(){
+                that.dateRange = date.date.format('YYYY-MM-DD');
+                that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+              });
+            });
+
+
 
              }
            ],

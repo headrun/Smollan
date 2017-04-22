@@ -146,7 +146,10 @@ var config = {
               "<%= vendorPath %>/vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js",
               "<%= vendorPath %>/vendors/bower_components/Waves/dist/waves.min.js",
               "<%= vendorPath %>/vendors/bootstrap-growl/bootstrap-growl.min.js",
+              "<%= vendorPath %>/vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.js",              
               "<%= vendorPath %>/vendors/bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js",
+              "<%= vendorPath %>/bower_components/moment/min/moment.min.js",
+              "<%= vendorPath %>/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
               "<%= libsPath %>/angular-ui-router/release/angular-ui-router.min.js",
               "<%= libsPath %>/angular-bind-html-compile/angular-bind-html-compile.min.js",
               "<%= libsPath %>/highcharts/modules/map.js",            
@@ -226,7 +229,7 @@ var config = {
         {
           expand: true,
           cwd: "<%= src %>/",
-          src: ["libs/**", "vendor/**", "img/**", "fonts/**"],
+          src: ["libs/**", "vendors/**", "img/**", "fonts/**"],
           dest: "<%= dist %>/"
         }
       ]
