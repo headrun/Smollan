@@ -13,6 +13,7 @@ from common.decorators import allowedMethods
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from dateutil import parser
+from django.db.models import Q
 from dateutil.relativedelta import relativedelta
 
 try:
@@ -43,26 +44,57 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
         'project': 'project'
     }
 
-    if not country and start_date and end_date:
-        query_data = [model_objs.filter(day__gte=start_date, day__lte=end_date).aggregate(
-            actual=Sum('attendance_achvd'), target=Sum('attendance_target'))]
+    if not country:
+	query = Q()
+	if start_date:
+ 	    query = query & Q(day__gte=start_date)
+	if end_date:
+	    query = query & Q(day__lte=end_date)	
+	if start_date and end_date:
+            query_data = [model_objs.filter(query).aggregate(
+            	actual=Sum('attendance_achvd'), target=Sum('attendance_target'))]
+	else:
+	    query_data = [model_objs.all().aggregate(actual=Sum('attendance_achvd'),\
+				target=Sum('attendance_target'))]
         return_key = 'all'
-    if country and not project and start_date and end_date:
-        query_data = model_objs.filter(countrycode=country, day__gte=start_date, \
-		day__lte=end_date).values('project').annotate(
-            	actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+
+    if country and not project:
+	query = Q(countrycode=country)
+	if start_date:
+	    query = query & Q(day__gte=start_date)
+	if end_date:
+	    query = query & Q(day__lte=end_date)
+
+	query_data = model_objs.filter(query).values('project').annotate(\
+		actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
         return_key = 'projects'
-    if country and project and start_date and end_date:
-        if country == 'all' and project == 'all':
-            query_data = model_objs.filter(day__gte=start_date, day__lte=end_date).\
-		values('countrycode').annotate(actual=Sum('attendance_achvd'), \
-		target=Sum('attendance_target'))
-            return_key = 'countries'
-        else:
-            query_data = model_objs.filter(project=project, day__gte=start_date, \
-		day__lte=end_date).values('project').annotate(
-                actual=Sum('attendance_achvd'), target=Sum('attendance_target'))            
-            return_key = 'project'
+
+    if country and project:
+	    if country == 'all' and project == 'all':
+		query = Q()
+		if start_date:
+		    query = query & Q(day__gte=start_date)
+		if end_date:
+		    query = query & Q(day__lte=end_date)
+
+		if query:
+		    query_data = model_objs.filter(query).\
+			values('countrycode').annotate(actual=Sum('attendance_achvd'), \
+			target=Sum('attendance_target'))
+		else:
+		    query_data = model_objs.all().values('countrycode').annotate(\
+			actual=Sum('attendance_achvd'),target=Sum('attendance_target'))
+		    return_key = 'countries'
+	    else:
+		query = Q(project=project)
+		if start_date:
+		    query = query & Q(day__gte=start_date)
+		if end_date:
+		    query = query & Q(day__lte=end_date)
+
+		query_data = model_objs.filter(query).values('project').annotate(
+			actual=Sum('attendance_achvd'), target=Sum('attendance_target'))            
+		return_key = 'project'
 
     for datum in query_data:
 
@@ -85,8 +117,8 @@ def attendance(request):
     project = request.GET.get('project', None)
     day = request.GET.get('day', None)
     #import pdb;pdb.set_trace()
-    start_date = request.GET.get('start_date', '2016-12-01')
-    end_date = request.GET.get('end_date', '2016-12-31')
+    start_date = request.GET.get('start_date', None)
+    end_date = request.GET.get('end_date', None)
 
     graph_data, detail = get_filtered_graph_data('kpi', country, project, start_date, end_date)
 
@@ -158,22 +190,25 @@ def outlets(request):
 def promo(request):
     start_date = request.GET.get('start_date', None)
     end_date = request.GET.get('end_date', None)
-    country = request.GET.get('country', 'singapore')
-    project = request.GET.get('project', 'dksh')
+    country = request.GET.get('country', None)
+    project = request.GET.get('project', None)
 
+    query = Q()
     if start_date:
         start_date = parser.parse(start_date).date()
-    else:
-        #start_date = datetime.datetime.now().date()-relativedelta(days=30)
-        start_date = parser.parse('2016-12-01').date()
-
+	query = query & Q(day__gte=start_date)
     if end_date:
         end_date = parser.parse(end_date).date()
+	query = query & Q(day__lte=end_date)
+    if country:
+	query = query & Q(countrycode = country)
+    if project:
+	query = query & Q(project = project)
+
+    if query:
+    	kpis = Kpi.objects.filter(query)
     else:
-        #end_date = datetime.datetime.now().date()
-        end_date = parser.parse('2016-12-31').date()
-    kpis = Kpi.objects.filter(day__gte=start_date, day__lte=end_date,\
-		 countrycode = country, project = project)
+	kpis = Kpi.objects.all()
 
     kpi_values = kpis.values('day').annotate(
                 actual=Sum('promo_available'), target=Sum('promo_target'))
@@ -191,15 +226,29 @@ def promo(request):
 @loginRequired
 def heatmap(request):
     _format = request.GET.get('format', 'dict')
-    start_date = request.GET.get('start_date', '2016-12-01')
-    end_date = request.GET.get('end_date', '2016-12-31')
-    country = request.GET.get('country', 'singapore')
-    project = request.GET.get('project', 'dksh')
+    start_date = request.GET.get('start_date', None)
+    end_date = request.GET.get('end_date', None)
+    country = request.GET.get('country', None)
+    project = request.GET.get('project', None)
 
-    query_data = Kpi.objects.filter(day__gte=start_date, day__lte=end_date,\
-		    countrycode = country, project = project).\
+    query = Q()
+    if start_date:
+	query = query & Q(day__gte=start_date)
+    if end_date:
+	query = query & Q(day__lte=end_date)
+    if country:
+	query = query & Q(countrycode = country)
+    if project:
+	query = query & Q(project = project)
+
+    if query:
+	query_data = Kpi.objects.filter(query).\
 		    values('countrycode').annotate(
             	    actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+    else:
+	query_data = Kpi.objects.all().values('countrycode').\
+		annotate(actual=Sum('attendance_achvd'), target=Sum('attendance_target'))
+
     data_list = []
 
     py_countries = {}
