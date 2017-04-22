@@ -115,7 +115,7 @@
 
                         chrt.addSeriesAsDrilldown(point, resp.result);
                       }else{
-                        att_chart.series[0] && att_chart.series[0].remove(true);                        
+                        att_chart.series[0] && att_chart.series[0].remove();                        
                         att_chart.addSeries(resp.result)
                       }
                       that.hideLoading();

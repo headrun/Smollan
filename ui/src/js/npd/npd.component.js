@@ -4,11 +4,18 @@
   angular.module("npd")
          .component("npd", {
            "templateUrl": global.templateDir + "/npd.html",
-           "controller" : ["$rootScope", "$state",
+           "controller" : ["$rootScope", "$state", "$http",
 
-             function ($rootScope, $state) {
+             function ($rootScope, $state, $http) {
 
-               var that = this;
+              var that = this;
+              that.countries = null;
+              that.projects = null;
+              that.selectedCountry = null;
+              that.selectedProject = null;
+              that.dateRange = null;
+              that.awaitingResponse = false;               
+
 
                 $('#npd_table tfoot td').each( function () {
                     var title = $(this).text();
@@ -36,15 +43,17 @@
                     ]
                 } );
 
-		$('#country').keyup(function () {
-                        var v =$(this).val();
-                        npd_table.columns(1).search(v).draw();
+
+                $('#country').change(function () {
+                  var v =$(this).val();
+                  npd_table.columns(1).search(v).draw();
                 } );
 
-                $('#project').keyup(function () {
-                        var v =$(this).val();
-                        npd_table.columns(2).search(v).draw();
+                $('#project').change(function () {
+                  var v =$(this).val();
+                  npd_table.columns(2).search(v).draw();
                 } );
+
 
                 npd_table.columns().every( function () {
                     var that = this;
@@ -59,6 +68,82 @@
                 } );
               //Datatable end
               that.hideLoading();
+
+
+
+              that.getCountriesData = function(){
+
+                var response = null,
+                  country = that.selectedCountry || null;
+
+                return $http({
+                  url: "/api/get_countries", 
+                  method: "GET",
+                  params: {}
+                })
+                  .then(function (resp) {
+
+                      console.log(resp);
+                      resp = resp.data;
+
+                      if (resp.error) {
+
+                        return;
+                      }
+
+                      that.countries = resp.result;
+
+                    }).then(function () {
+
+                      that.awaitingResponse = true;
+                  });
+
+              }
+
+
+              that.getProjectsData = function(){
+
+                var response = null,
+                  country = that.selectedCountry || null;
+
+                return $http({
+                  url: "/api/get_projects", 
+                  method: "GET",
+                  params: {country: country}
+                })
+                  .then(function (resp) {
+
+                      console.log(resp);
+                      resp = resp.data;
+
+                      if (resp.error) {
+
+                        return;
+                      }
+
+
+                      that.projects = resp.result;
+                    }).then(function () {
+
+                      that.awaitingResponse = true;
+                  });
+
+              }
+
+              that.getCountriesData();
+              that.getProjectsData();
+
+
+              that.onCountryChange = function(){
+
+                that.selectedProject = null;
+                that.getProjectsData();
+              }
+
+
+
+
+
 
              }
            ],

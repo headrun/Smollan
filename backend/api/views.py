@@ -54,13 +54,13 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
             query = query & Q(day__gte=start_date)
         if end_date:
             query = query & Q(day__lte=end_date)    
-        if start_date and end_date:
+        if query:
                 query_data = [model_objs.filter(query).aggregate(
                     actual=Sum('attendance_achvd'), target=Sum('attendance_target'))]
         else:
             query_data = [model_objs.all().aggregate(actual=Sum('attendance_achvd'),\
                     target=Sum('attendance_target'))]
-            return_key = 'all'
+        return_key = 'all'
 
     if country and not project:
         query = Q(countrycode=country)
@@ -258,11 +258,17 @@ def heatmap(request):
     for country in pycountry.countries:
        py_countries[country.name] = country.alpha_2
 
+
+    stnd_dict = {'Hongkong': 'Hong Kong', 'Taiwan' : 'Taiwan, Province of China',\
+                       'Vietnam' : 'Viet Nam'}
+
     for data in query_data:
         if _format == 'dict':
+            cnt_name = data['countrycode'].title()
+            cnt_code = stnd_dict.get(cnt_name, cnt_name)
             data_dict = {}
-            data_dict['name'] = data['countrycode'].title()
-            data_dict['code'] = py_countries.get(data['countrycode'].title(), 'Unknown code')
+            data_dict['name'] = cnt_name
+            data_dict['code'] = py_countries.get(cnt_code, 'Unknown code')
             data_dict['value'] = round((data['actual']/data['target'])*100, 0)
             if not data_dict['code'] == 'Unknown code':
                 data_list.append(data_dict)
