@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login as authLogin,\
                                 logout as authLogout
 
 from decorators import loginRequired
+from django.views.decorators.csrf import csrf_exempt
 from common.utils import getHttpResponse as HttpResponse
 from common.decorators import allowedMethods
 
@@ -15,6 +16,7 @@ def getUserData(user):
           "lastName" : user.last_name,\
           "email"    : user.email}
 
+@csrf_exempt
 @allowedMethods(["POST"])
 def login(request):
 
@@ -53,12 +55,14 @@ def login(request):
 
 @allowedMethods(["GET"])
 @loginRequired
+@csrf_exempt
 def logout(request):
 
   authLogout(request)
 
   return HttpResponse("logged out")
 
+@csrf_exempt
 @ensure_csrf_cookie
 def status(request):
 
