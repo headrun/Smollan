@@ -10,7 +10,7 @@
 
               var that = this,
                  filter_map = {
-                  "all": "countrycode",
+                  "South East Asia": "countrycode",
                   "countrycode": "project",
                   "project": "project"
                  };
@@ -28,7 +28,7 @@
 
                 var series_name = chart.series[0].name,
                   country, project;
-                if(series_name == 'all'){
+                if(series_name == 'South East Asia'){
                   country = 'all';
                   project = 'all';
                 }else if(series_name == 'countries'){
@@ -40,6 +40,7 @@
                 }
                 return [country, project]
               }
+
               // Create the chart
               var att_chart = Highcharts.chart('attendance-container', {
                   chart: {
@@ -115,7 +116,11 @@
 
                         chrt.addSeriesAsDrilldown(point, resp.result);
                       }else{
-                        att_chart.series[0] && att_chart.series[0].remove();                        
+                        console.log(att_chart.series);
+                        _.each(att_chart.series, function(series){
+                          series.remove();
+                        });
+                        console.log(att_chart.series);
                         att_chart.addSeries(resp.result)
                       }
                       that.hideLoading();

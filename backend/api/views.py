@@ -60,7 +60,7 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
         else:
             query_data = [model_objs.all().aggregate(actual=Sum('attendance_achvd'),\
                     target=Sum('attendance_target'))]
-        return_key = 'all'
+        return_key = 'South East Asia'
 
     if country and not project:
         query = Q(countrycode=country)
@@ -103,7 +103,7 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
         for datum in query_data:
 
             graph_point = {
-                'name': 'all' if return_key=='all' else datum[filter_map[return_key]],
+                'name': 'South East Asia' if return_key=='South East Asia' else datum[filter_map[return_key]],
                 'actual': datum['actual'],
                 'target': datum['target'],
                 'y': round((datum['actual']/datum['target'])*100, 2),
