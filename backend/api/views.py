@@ -218,10 +218,11 @@ def get_node_links_sankey(kpis, node_map):
         node_link = {
             'source': node_map[ent['countrycode']],
             'value': round((ent['available']/ent['target'])*100, 0) if ent['target'] else 0,
-            #'value': 1,
+            #'value': ent['available'],
             'target': node_map[ent['project']]
         }
-        links.append(node_link)
+        if ent['target']:
+            links.append(node_link)
     return links
 
 #@loginRequired
