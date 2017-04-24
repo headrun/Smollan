@@ -113,6 +113,9 @@
                           .text(function(d) {
                           return d.source.name + " → " + 
                                   d.target.name + "\n" + format(d.value); });
+                    link.append("data-toogle")
+                          .text("tooltip");
+                    $('[data-toggle="tooltip"]').tooltip(); 
 
                   // add in the nodes
                     var node = svg.append("g").selectAll(".node")

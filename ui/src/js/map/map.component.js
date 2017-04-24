@@ -42,12 +42,12 @@
                         that.map_chart = Highcharts.mapChart('map-container', {
 
                             title: {
-                                text: 'Attendance density'
+                                text: 'Attendance percentage'
                             },
 
                             legend: {
                                 title: {
-                                    text: 'Attendance density per km²',
+                                    text: 'Attendance percentage',
                                     style: {
                                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
                                     }
@@ -68,7 +68,7 @@
                                 useHTML: true,
                                 padding: 0,
                                 pointFormat: '<span class="f32"><span class="flag {point.flag}"></span></span>' +
-                                    ' {point.name}: <b>{point.value}</b>/km²',
+                                    ' {point.name}: <b>{point.value}</b>',
                                 positioner: function () {
                                     return { x: 0, y: 250 };
                                 }
@@ -84,7 +84,7 @@
                                 data: data,
                                 mapData: Highcharts.maps['custom/world'],
                                 joinBy: ['iso-a2', 'code'],
-                                name: 'Attendance density',
+                                name: 'Attendance Percentage',
                                 states: {
                                     hover: {
                                         color: '#a4edba'
