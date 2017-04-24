@@ -15,7 +15,8 @@
                 that.projects = null;
                 that.selectedCountry = null;
                 that.selectedProject = null;
-                that.dateRange = null;
+                that.startDate = null;
+                that.endDate = null;
                 that.awaitingResponse = false;
                 that.map_chart = null;
 
@@ -25,8 +26,8 @@
                         params = {
                             'country': that.selectedCountry || null,
                             'project': that.selectedProject || null,
-                            'start_date': that.dateRange || null,
-                            'end_date': that.dateRange || null
+                            'start_date': that.startDate || null,
+                            'end_date': that.endDate || null
                         }
 
                     $.getJSON(url, params, function (data) {
@@ -189,42 +190,24 @@
 
 
                 // Widget initializations
-                $('.date-picker').datetimepicker({
-                    format: 'DD/MM/YYYY',
-                    useCurrent: false
-                }).on('dp.show', function (e) {
-                  var datepicker = $('body').find('.bootstrap-datetimepicker-widget:last'),
-                      position = datepicker.offset(),
-                      parent = datepicker.parent(),
-                      parentPos = parent.offset(),
-                      width = datepicker.width(),
-                      parentWid = parent.width();
-
-                  // move datepicker to the exact same place it was but attached to body
-                  datepicker.appendTo('body');
-                  datepicker.css({
-                      position: 'absolute',
-                      top: position.top,
-                      bottom: 'auto',
-                      left: position.left,
-                      right: 'auto',
-                      'z-index': 10
-                  });
-
-                  // if datepicker is wider than the thing it is attached to then move it so the centers line up
-                  if (parentPos.left + parentWid < position.left + width) {
-                      var newLeft = parentPos.left;
-                      newLeft += parentWid / 2;
-                      newLeft -= width / 2;
-                      datepicker.css({left: newLeft});
-                  }
-              }).on('dp.change', function(date, oldDate){
-                $scope.$apply(function(){
-                  that.dateRange = date.date.format('YYYY-MM-DD');
-                  that.refreshChart();
-                });
+              $('.date-picker').daterangepicker({
+                  format: 'DD/MM/YYYY',
+                  "drops": "down",
+                  "autoApply": true,
+                  autoUpdateInput: false,                  
               });
 
+              $('.date-picker').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                $scope.$apply(function(){
+                  that.startDate = picker.startDate.format('YYYY-MM-DD');
+                  that.endDate = picker.endDate.format('YYYY-MM-DD');
+                  that.refreshChart();
+                });
+            });
+            $('.date-picker').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
 
             }
            ],

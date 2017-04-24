@@ -20,7 +20,8 @@
               that.projects = null;
               that.selectedCountry = null;
               that.selectedProject = null;
-              that.dateRange = null;
+              that.startDate = null;
+              that.endDate = null;
               that.awaitingResponse = false;
 
 
@@ -90,7 +91,9 @@
 
                 var country = country || that.selectedCountry,
                   project = project || that.selectedProject,
-                  daterange = that.dateRange || null;
+                  start_date = that.startDate || null,
+                  end_date = that.endDate || null;
+
                 var response = null;
 
                 $http({
@@ -99,8 +102,8 @@
                   params: {
                     "country": country,
                     "project": project,
-                    "start_date": daterange,
-                    "end_date": daterange
+                    "start_date": start_date,
+                    "end_date": end_date
                   }
                 })
                     .then(function (resp) {
@@ -219,43 +222,25 @@
 
 
               // Widget initializations
-              $('.date-picker').datetimepicker({
+              $('.date-picker').daterangepicker({
                   format: 'DD/MM/YYYY',
-                  useCurrent: false
-              }).on('dp.show', function (e) {
-                var datepicker = $('body').find('.bootstrap-datetimepicker-widget:last'),
-                    position = datepicker.offset(),
-                    parent = datepicker.parent(),
-                    parentPos = parent.offset(),
-                    width = datepicker.width(),
-                    parentWid = parent.width();
-
-                // move datepicker to the exact same place it was but attached to body
-                datepicker.appendTo('body');
-                datepicker.css({
-                    position: 'absolute',
-                    top: position.top,
-                    bottom: 'auto',
-                    left: position.left,
-                    right: 'auto',
-                    'z-index': 10
-                });
-
-                // if datepicker is wider than the thing it is attached to then move it so the centers line up
-                if (parentPos.left + parentWid < position.left + width) {
-                    var newLeft = parentPos.left;
-                    newLeft += parentWid / 2;
-                    newLeft -= width / 2;
-                    datepicker.css({left: newLeft});
-                }
-            }).on('dp.change', function(date, oldDate){
-              $scope.$apply(function(){
-                that.dateRange = date.date.format('YYYY-MM-DD');
-                that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+                  "drops": "up",
+                  "autoApply": true,
+                  autoUpdateInput: false,                  
               });
+
+              $('.date-picker').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                $scope.$apply(function(){
+                  that.startDate = picker.startDate.format('YYYY-MM-DD');
+                  that.endDate = picker.endDate.format('YYYY-MM-DD');
+                  that.getData(that.selectedCountry, that.selectedProject, att_chart, false);
+                });
             });
 
-
+            $('.date-picker').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
 
              }
            ],

@@ -44,10 +44,6 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
         'project': 'project'
     }
 
-    #remove this, just to show data
-    if end_date:
-        end_date = (parser.parse(end_date)+relativedelta(days=10)).strftime('%Y-%m-%d')
-
     if not country:
         query = Q()
         if start_date:
@@ -60,7 +56,8 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
         else:
             query_data = [model_objs.all().aggregate(actual=Sum('attendance_achvd'),\
                     target=Sum('attendance_target'))]
-        return_key = 'South East Asia'
+        if query_data[0]['target']:
+            return_key = 'South East Asia'
 
     if country and not project:
         query = Q(countrycode=country)
@@ -85,6 +82,7 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
                 query_data = model_objs.filter(query).\
                 values('countrycode').annotate(actual=Sum('attendance_achvd'), \
                 target=Sum('attendance_target'))
+                return_key = 'countries'
             else:
                 query_data = model_objs.all().values('countrycode').annotate(\
                 actual=Sum('attendance_achvd'),target=Sum('attendance_target'))
@@ -99,7 +97,8 @@ def get_filtered_graph_data(model, country, project, start_date, end_date):
             query_data = model_objs.filter(query).values('project').annotate(
                 actual=Sum('attendance_achvd'), target=Sum('attendance_target'))            
             return_key = 'project'
-    if return_key:        
+
+    if return_key:
         for datum in query_data:
 
             graph_point = {

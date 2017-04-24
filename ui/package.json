@@ -1,22 +1,22 @@
 {
-  "name": "bootstrap",
+  "name": "Smollan",
   "version": "0.0.1",
-  "description": "Angular + Django Boilerplate",
+  "description": "Smollan Poc",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Buzzingasocial/bootstrap.git"
+    "url": "git+https://github.com/headrun/Smollan.git"
   },
-  "environment": "!production",
-  "author": "prashanth.pamidi@headrun.com",
+  "environment": "production",
+  "author": "praneeth.praneeth@headrun.com",
   "license": "ISC",
   "dependencies": {
     "jquery": "^3.1.0",
     "underscore": "^1.8.3"
   },
   "bugs": {
-    "url": "https://github.com/Buzzingasocial/bootstrap/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/Buzzingasocial/bootstrap#readme",
+  "homepage": "https://github.com/headrun/Smollan/blob/master/README.md",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-aws": "^0.6.2",
