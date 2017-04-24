@@ -210,12 +210,15 @@ def get_nodes_sankey(kpis):
 
 
 def get_node_links_sankey(kpis, node_map):
-    kpi_values = kpis.values('countrycode', 'project').annotate(value=Sum('promo_available'))
+    kpi_values = kpis.values(
+        'countrycode', 'project').annotate(
+        available=Sum('promo_available'), target=Sum('promo_target'))
     links = []
     for ent in kpi_values:
         node_link = {
             'source': node_map[ent['countrycode']],
-            'value': 1,
+            'value': round((ent['available']/ent['target'])*100, 0) if ent['target'] else 0,
+            #'value': 1,
             'target': node_map[ent['project']]
         }
         links.append(node_link)
@@ -245,24 +248,11 @@ def promo(request):
     if query:
         kpis = Kpi.objects.filter(query)
     else:
-        #kpis = Kpi.objects.all()
-        kpis = Kpi.objects.filter(countrycode='HONGKONG')
+        kpis = Kpi.objects.all()
+        #kpis = Kpi.objects.filter(countrycode='HONGKONG')
 
     nodes, node_map = get_nodes_sankey(kpis)
     links = get_node_links_sankey(kpis, node_map)
-
-    # kpi_values = kpis.values('day').annotate(
-    #             actual=Sum('promo_available'), target=Sum('promo_target'))
-    # resp_list = []
-    # for kpi_val in kpi_values:
-    #     try:
-    #         kpi_val['percent'] = round(
-    #             (kpi_val['actual']/kpi_val['target'])*100, 2)
-    #     except ZeroDivisionError as e:
-    #         kpi_val['percent'] = 0
-    #     kpi_val['day'] = getUnixTimeMillisec(kpi_val['day'])
-    #     resp_list.append([kpi_val['day'], kpi_val['percent']])
-
 
 
     resp =  {
