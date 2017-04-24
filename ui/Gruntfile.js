@@ -154,6 +154,7 @@ var config = {
               "<%= libsPath %>/angular-bind-html-compile/angular-bind-html-compile.min.js",
               "<%= libsPath %>/highcharts/modules/map.js",            
               "<%= vendorPath %>/maps_data/world.js",
+              "<%= jsPath  %>/commonJs/sankey.js",
               "<%= jsPath %>/core/auth/auth.js",
               "<%= jsPath %>/core/auth/session.js",
               "<%= jsPath %>/core/auth/authEvents.js",

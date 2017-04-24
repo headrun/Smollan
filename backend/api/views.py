@@ -186,6 +186,41 @@ def outlets(request):
 
     return HttpResponse(list(kpi_values))
 
+
+def format_nodes(node_list, node_map):
+    nodes = []
+    for ind, ent in enumerate(node_list):
+        node = {
+            'node': ind,
+            'name': ent
+        }
+        node_map[ent] = ind
+        nodes.append(node)
+    return nodes
+
+
+def get_nodes_sankey(kpis):
+    countries = list(kpis.distinct().values_list('countrycode', flat=True))
+    projects = list(kpis.distinct().values_list('project', flat=True))
+    node_list = countries + projects
+    nodes = []
+    node_map = {}
+    nodes = format_nodes(node_list, node_map)
+    return nodes, node_map
+
+
+def get_node_links_sankey(kpis, node_map):
+    kpi_values = kpis.values('countrycode', 'project').annotate(value=Sum('promo_available'))
+    links = []
+    for ent in kpi_values:
+        node_link = {
+            'source': node_map[ent['countrycode']],
+            'value': 1,
+            'target': node_map[ent['project']]
+        }
+        links.append(node_link)
+    return links
+
 #@loginRequired
 @csrf_exempt
 @allowedMethods(["GET"])
@@ -210,21 +245,74 @@ def promo(request):
     if query:
         kpis = Kpi.objects.filter(query)
     else:
-        kpis = Kpi.objects.all()
+        #kpis = Kpi.objects.all()
+        kpis = Kpi.objects.filter(countrycode='HONGKONG')
+
+    nodes, node_map = get_nodes_sankey(kpis)
+    links = get_node_links_sankey(kpis, node_map)
+
+    # kpi_values = kpis.values('day').annotate(
+    #             actual=Sum('promo_available'), target=Sum('promo_target'))
+    # resp_list = []
+    # for kpi_val in kpi_values:
+    #     try:
+    #         kpi_val['percent'] = round(
+    #             (kpi_val['actual']/kpi_val['target'])*100, 2)
+    #     except ZeroDivisionError as e:
+    #         kpi_val['percent'] = 0
+    #     kpi_val['day'] = getUnixTimeMillisec(kpi_val['day'])
+    #     resp_list.append([kpi_val['day'], kpi_val['percent']])
 
 
-    kpi_values = kpis.values('day').annotate(
-                actual=Sum('promo_available'), target=Sum('promo_target'))
-    resp_list = []
-    for kpi_val in kpi_values:
-        try:
-            kpi_val['percent'] = round(
-                (kpi_val['actual']/kpi_val['target'])*100, 2)
-        except ZeroDivisionError as e:
-            kpi_val['percent'] = 0
-        kpi_val['day'] = getUnixTimeMillisec(kpi_val['day'])
-        resp_list.append([kpi_val['day'], kpi_val['percent']])
-    return HttpResponse(resp_list)
+
+    resp =  {
+                "nodes": nodes,
+                "links": links
+            };
+
+    return HttpResponse(resp)
+
+
+
+# #@loginRequired
+# @csrf_exempt
+# @allowedMethods(["GET"])
+# def promo(request):
+#     start_date = request.GET.get('start_date', None)
+#     end_date = request.GET.get('end_date', None)
+#     country = request.GET.get('country', None)
+#     project = request.GET.get('project', None)
+
+#     query = Q()
+#     if start_date:
+#         start_date = parser.parse(start_date).date()
+#         query = query & Q(day__gte=start_date)
+#     if end_date:
+#         end_date = parser.parse(end_date).date()
+#         query = query & Q(day__lte=end_date)
+#     if country:
+#         query = query & Q(countrycode = country)
+#     if project:
+#         query = query & Q(project = project)
+
+#     if query:
+#         kpis = Kpi.objects.filter(query)
+#     else:
+#         kpis = Kpi.objects.all()
+
+
+#     kpi_values = kpis.values('day').annotate(
+#                 actual=Sum('promo_available'), target=Sum('promo_target'))
+#     resp_list = []
+#     for kpi_val in kpi_values:
+#         try:
+#             kpi_val['percent'] = round(
+#                 (kpi_val['actual']/kpi_val['target'])*100, 2)
+#         except ZeroDivisionError as e:
+#             kpi_val['percent'] = 0
+#         kpi_val['day'] = getUnixTimeMillisec(kpi_val['day'])
+#         resp_list.append([kpi_val['day'], kpi_val['percent']])
+#     return HttpResponse(resp_list)
 
 @loginRequired
 def heatmap(request):

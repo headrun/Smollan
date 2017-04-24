@@ -3,12 +3,11 @@ promo{
 
   #promo-container {
 
-    min-width: 310px;
-    height: 400px;
     margin: 0 auto;
     padding-left: 290px;
     padding-right: 20px;
     margin-top: 70px;
+    text-align: center;
   }
 
   #sidebar {
@@ -81,3 +80,30 @@ promo{
     }    
   }
 }
+
+
+
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+
+.link:hover {
+  stroke-opacity: .5;
+}
+
+
+
+

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet"
           href="<%= static("vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css", true) %>" />
+
     <!--<link href="<%= static("vendors/bower_components/bootstrap-select/dist/css/bootstrap-select.css" , true) %>" rel="stylesheet">-->
     <!-- application specific styles -->
     <link rel="stylesheet"
@@ -39,6 +40,7 @@
       }());
     </script>
     <!-- APP -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="<%= static("js/app.js") %>"></script>
   </body>
 </html>
