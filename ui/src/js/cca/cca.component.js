@@ -48,8 +48,7 @@
                     ]
                 } );
 
-                $('.DTTT_container').children().not('.DTTT_button_xls').remove();
-                $('.DTTT_button_xls').text('Export as Excel');
+                $('.DTTT_container').html('<div class="btn btn-xs btn-primary">Download as Excel</div>');
                 $('.dataTables_filter').hide();
                 $('#country').change(function () {
                   var v =$(this).val();
