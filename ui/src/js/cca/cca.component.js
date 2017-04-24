@@ -25,6 +25,8 @@
                     "language": {
                       "emptyTable": "No data available in table"
                     },
+                    dom: 'T<"clear">lfrtip',
+
                     "ajax":{
                       url: "/api/outlets/",
                       "dataSrc": function(json){
@@ -39,12 +41,16 @@
                         { "data": "countrycode" },
                         { "data": "project" },
                         { "data": "moc" },
+                        { "data": "day" },                        
                         { "data": "outlets_total" },
                         { "data": "outlets_done" },
                         { "data": "outlets_percent" }                  
                     ]
                 } );
 
+                $('.DTTT_container').children().not('.DTTT_button_xls').remove();
+                $('.DTTT_button_xls').text('Export as Excel');
+                $('.dataTables_filter').hide();
                 $('#country').change(function () {
                   var v =$(this).val();
                   cca_table.columns(1).search(v).draw();

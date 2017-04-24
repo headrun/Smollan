@@ -136,52 +136,56 @@ def attendance(request):
 @allowedMethods(["GET"])
 def osa(request):
     kpis = Kpi.objects.all()
-    kpi_values = kpis.values('countrycode', 'project', 'moc', 'osa_target', 'osa_available')
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'day', 'osa_target', 'osa_available')
     for kpi_val in kpi_values:
         try:
             kpi_val['osa_percent'] = round(
                 (kpi_val['osa_available']/kpi_val['osa_target'])*100, 2)
         except ZeroDivisionError as e:
             kpi_val['osa_percent'] = 0
+        kpi_val['day'] = kpi_val['day'].strftime('%d-%m-%Y')            
 
     return HttpResponse(list(kpi_values))
 
 @loginRequired
 def pop(request):
     kpis = Kpi.objects.all()
-    kpi_values = kpis.values('countrycode', 'project', 'moc', 'pop_target', 'pop_available')
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'day', 'pop_target', 'pop_available')
     for kpi_val in kpi_values:
         try:
             kpi_val['pop_percent'] = round(
                 (kpi_val['pop_available']/kpi_val['pop_target'])*100, 2)
         except ZeroDivisionError as e:
             kpi_val['pop_percent'] = 0
+        kpi_val['day'] = kpi_val['day'].strftime('%d-%m-%Y')
 
     return HttpResponse(list(kpi_values)) 
 
 @loginRequired
 def npd(request):
     kpis = Kpi.objects.all()
-    kpi_values = kpis.values('countrycode', 'project', 'moc', 'npd_target', 'npd_available')
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'day', 'npd_target', 'npd_available')
     for kpi_val in kpi_values:
         try:
             kpi_val['npd_percent'] = round(
                 (kpi_val['npd_available']/kpi_val['npd_target'])*100, 2)
         except ZeroDivisionError as e:
             kpi_val['npd_percent'] = 0
+        kpi_val['day'] = kpi_val['day'].strftime('%d-%m-%Y')
 
     return HttpResponse(list(kpi_values))
 
 @loginRequired
 def outlets(request):
     kpis = Kpi.objects.all()
-    kpi_values = kpis.values('countrycode', 'project', 'moc', 'outlets_done', 'outlets_total')
+    kpi_values = kpis.values('countrycode', 'project', 'moc', 'day', 'outlets_done', 'outlets_total')
     for kpi_val in kpi_values:
         try:
             kpi_val['outlets_percent'] = round(
                 (kpi_val['outlets_done']/kpi_val['outlets_total'])*100, 2)
         except ZeroDivisionError as e:
             kpi_val['outlets_percent'] = 0
+        kpi_val['day'] = kpi_val['day'].strftime('%d-%m-%Y')
 
     return HttpResponse(list(kpi_values))
 

@@ -26,7 +26,8 @@
                var pop_table = $('#pop_table').DataTable( {
                     "language": {
                       "emptyTable": "No data available in table"
-                    },                
+                    },
+                    dom: 'T<"clear">lfrtip',              
                     "ajax":{
                       url: "/api/pop/",
                       "dataSrc": function(json){
@@ -41,11 +42,15 @@
                         { "data": "countrycode" },
                         { "data": "project" },
                         { "data": "moc" },
+                        { "data": "day" },                        
                         { "data": "pop_target" },
                         { "data": "pop_available" },
                         { "data": "pop_percent" }                  
                     ]
                 } );
+                $('.DTTT_container').children().not('.DTTT_button_xls').remove();
+                $('.DTTT_button_xls').text('Export as Excel');
+                $('.dataTables_filter').hide();               
 
                 $('#country').change(function () {
                   var v =$(this).val();

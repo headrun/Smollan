@@ -14,7 +14,10 @@
     <link rel="stylesheet"
           href="<%= static("libs/bootstrap/dist/css/bootstrap.min.css", true) %>"  />
     <link rel="stylesheet"
-          href="<%= static("libs/bootstrap-daterangepicker/daterangepicker.css", true) %>" />    
+          href="<%= static("libs/bootstrap-daterangepicker/daterangepicker.css", true) %>" />   
+    <link rel="stylesheet"
+          href="<%= static("libs/datatables-tabletools/css/dataTables.tableTools.css", true) %>" />
+          
     <link rel="stylesheet"
           href="<%= static("vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css", true) %>" />
 
@@ -49,7 +52,7 @@
       }());
     </script>
     <!-- APP -->
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>   
     <script src="<%= static("js/app.js") %>"></script>
     <script id="no_data_msg" type="template/text">
       <div class='empty_msg'>

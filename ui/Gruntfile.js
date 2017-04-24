@@ -144,6 +144,7 @@ var config = {
               "<%= vendorPath %>/bower_components/bootstrap/dist/js/bootstrap.min.js",        
               "<%= libsPath %>/angular-ui-router/release/angular-ui-router.min.js",
               "<%= libsPath %>/datatables/media/js/jquery.dataTables.min.js",
+              "<%= libsPath %>/datatables-tabletools/js/dataTables.tableTools.js",
               "<%= vendorPath %>/vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js",
               "<%= vendorPath %>/vendors/bower_components/Waves/dist/waves.min.js",
               "<%= vendorPath %>/vendors/bootstrap-growl/bootstrap-growl.min.js",
