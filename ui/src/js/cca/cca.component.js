@@ -22,6 +22,9 @@
                 } );               
 
                var cca_table = $('#cca_table').DataTable( {
+                    "language": {
+                      "emptyTable": "No data available in table"
+                    },
                     "ajax":{
                       url: "/api/outlets/",
                       "dataSrc": function(json){

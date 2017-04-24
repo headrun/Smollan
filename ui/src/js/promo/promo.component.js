@@ -55,6 +55,12 @@
                   d3.json(query_url, function(error, graph) {
 
                     graph = graph.result;
+
+                    if(!graph.nodes.length){
+
+                      $('#promo-container').html($('#no_data_msg').html());
+                    }
+
                     sankey
                         .nodes(graph.nodes)
                         .links(graph.links)
@@ -73,7 +79,7 @@
                     link.append("title")
                           .text(function(d) {
                           return d.source.name + " → " + 
-                                  d.target.name + "\n" + format(d.value); });
+                                  d.target.name + "\n" + format(d.value)+ "%"; });
                     link.append("data-toogle")
                           .text("tooltip");
                     $('[data-toggle="tooltip"]').tooltip(); 

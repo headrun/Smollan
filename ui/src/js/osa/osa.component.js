@@ -22,6 +22,9 @@
                 } );               
 
                var osa_table = $('#osa_table').DataTable( {
+                    "language": {
+                      "emptyTable": "No data available in table"
+                    },                
                     "ajax":{
                       url: "/api/osa/",
                       "dataSrc": function(json){

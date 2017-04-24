@@ -42,6 +42,10 @@
                         // Initiate the chart
                         that.map_chart = Highcharts.mapChart('map-container', {
 
+                            credits: {
+                              enabled: false
+                            },
+
                             title: {
                                 text: 'Attendance percentage'
                             },

@@ -44,6 +44,9 @@
 
               // Create the chart
               var att_chart = Highcharts.chart('attendance-container', {
+                  credits: {
+                    enabled: false
+                  },
                   chart: {
                       type: 'column',
                       events: {
@@ -65,6 +68,12 @@
                   xAxis: {
                       type: 'category'
                   },
+                  yAxis: {
+                      type: 'percentage',
+                      title : {
+                        text: "Percentage"
+                      }
+                  },
 
                   legend: {
                       enabled: false
@@ -74,7 +83,8 @@
                       series: {
                           borderWidth: 0,
                           dataLabels: {
-                              enabled: true
+                              enabled: true,
+                              format: '{y} %'
                           }
                       }
                   },

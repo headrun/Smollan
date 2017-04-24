@@ -18,7 +18,8 @@
         <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
             <div class="fg-line">
-              <input type="text" name="uName" ng-model="$ctrl.credentials.username"
+              <input type="text" name="uName" placeholder="Username"
+                     ng-model="$ctrl.credentials.username"
                      class="form-control " required />
               <span class="field-error"
                     ng-show="userForm.uName.$touched">
@@ -31,6 +32,7 @@
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
             <div class="fg-line">
               <input type="password" name="uPassword"
+                     placeholder="password" 
                      ng-model="$ctrl.credentials.password"
                      class="form-control" required />
               <span class="field-error" ng-show="userForm.uPassword.$touched">

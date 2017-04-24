@@ -23,6 +23,9 @@
                 } );               
 
                var npd_table = $('#npd_table').DataTable( {
+                    "language": {
+                      "emptyTable": "No data available in table"
+                    },
                     "ajax":{
                       url: "/api/npd/",
                       "dataSrc": function(json){

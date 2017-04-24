@@ -24,6 +24,9 @@
                 } );               
 
                var pop_table = $('#pop_table').DataTable( {
+                    "language": {
+                      "emptyTable": "No data available in table"
+                    },                
                     "ajax":{
                       url: "/api/pop/",
                       "dataSrc": function(json){

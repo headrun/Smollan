@@ -140,6 +140,7 @@ var config = {
               "<%= libsPath %>/underscore/underscore-min.js",
               "<%= libsPath %>/highcharts/highcharts.js",
               "<%= libsPath %>/highcharts/modules/drilldown.js",
+              "<%= libsPath %>/highcharts/modules/no-data-to-display.js",
               "<%= vendorPath %>/bower_components/bootstrap/dist/js/bootstrap.min.js",        
               "<%= libsPath %>/angular-ui-router/release/angular-ui-router.min.js",
               "<%= libsPath %>/datatables/media/js/jquery.dataTables.min.js",
